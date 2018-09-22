@@ -1,6 +1,8 @@
 package com.gmail.republicweb1.republicweb;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,11 +22,15 @@ import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
     private TextView mTextMessage;
+    private Button Admin;
     private Button Customer;
     private Button Reseller;
+    String f_name, username;
+    SharedPreferences sharedpreferences;
+
+    public final static String TAG_USERNAME = "username";
+    public final static String TAG_F_name = "f_name";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         Customer = (Button)findViewById(R.id.Customer);
         Reseller = (Button)findViewById(R.id.Reseller);
+
+        f_name = getIntent().getStringExtra(TAG_F_name);
+        username = getIntent().getStringExtra(TAG_USERNAME);
+
+        sharedpreferences = getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
 
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);

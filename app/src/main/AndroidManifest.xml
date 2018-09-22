@@ -25,8 +25,18 @@
         <activity
             android:name=".MainActivity"
             android:label="Home" />
-        <activity android:name=".ProfilActivity" />
-        <activity android:name=".Reseller"></activity>
+        <activity android:name=".ProfilActivity"
+            android:label="Profile"/>
+        <activity android:name=".Reseller" />
+        <activity android:name=".ProfilActivityAdmin"
+            android:label="Profile"/>
+        <activity android:name=".MainActivityAdmin"
+            android:label="Home"/>
+        <activity android:name=".MainActivityReseller"
+            android:label="Home"/>
+        <activity android:name=".ProfilActivityReseller"
+            android:label="Profile"/>
+        <activity android:name=".Customer"></activity>
     </application>
 
 </manifest>

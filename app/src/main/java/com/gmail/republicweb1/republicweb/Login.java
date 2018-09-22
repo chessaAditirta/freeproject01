@@ -43,13 +43,18 @@ public class Login extends AppCompatActivity {
     private static final String TAG_MESSAGE = "message";
 
     public final static String TAG_USERNAME = "username";
-    public final static String TAG_name = "name";
+    public final static String TAG_F_name = "f_name";
+    public final static String TAG_DOU = "degree_of_user";
+
+    private static Context mCtx;
 
     String tag_json_obj = "json_obj_req";
 
     SharedPreferences sharedpreferences;
     Boolean session = false;
-    String name, username;
+    String f_name, username
+            , dou
+            ;
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
 
@@ -74,16 +79,18 @@ public class Login extends AppCompatActivity {
         txt_username = (EditText) findViewById(R.id.txt_username);
         txt_password = (EditText) findViewById(R.id.txt_password);
 
-        // Cek session login jika TRUE maka langsung buka MainActivity
+        // Cek session login jika TRUE maka langsung buka Profil
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
         session = sharedpreferences.getBoolean(session_status, false);
-        name = sharedpreferences.getString(TAG_name, null);
+        f_name = sharedpreferences.getString(TAG_F_name, null);
         username = sharedpreferences.getString(TAG_USERNAME, null);
+        dou     = sharedpreferences.getString(TAG_DOU, null);
 
         if (session) {
-            Intent intent = new Intent(Login.this, MainActivity.class);
-            intent.putExtra(TAG_name, name);
+            Intent intent = new Intent(Login.this, ProfilActivity.class);
+            intent.putExtra(TAG_F_name, f_name);
             intent.putExtra(TAG_USERNAME, username);
+            intent.putExtra(TAG_DOU, dou);
             finish();
             startActivity(intent);
         }
@@ -143,10 +150,12 @@ public class Login extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);
                     success = jObj.getInt(TAG_SUCCESS);
 
+
                     // Check for error node in json
                     if (success == 1) {
                         String username = jObj.getString(TAG_USERNAME);
-                        String name = jObj.getString(TAG_name);
+                        String f_name = jObj.getString(TAG_F_name);
+                        String dou = jObj.getString(TAG_DOU);
 
                         Log.e("Successfully Login!", jObj.toString());
 
@@ -155,16 +164,36 @@ public class Login extends AppCompatActivity {
                         // menyimpan login ke session
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putBoolean(session_status, true);
-                        editor.putString(TAG_name, name);
+                        editor.putString(TAG_F_name, f_name);
                         editor.putString(TAG_USERNAME, username);
+                        editor.putString(TAG_DOU, dou);
                         editor.commit();
 
                         // Memanggil main activity
-                        Intent intent = new Intent(Login.this, MainActivity.class);
-                        intent.putExtra(TAG_name, name);
-                        intent.putExtra(TAG_USERNAME, username);
-                        finish();
-                        startActivity(intent);
+                        if(dou.equals("SuperAdmin")) {
+                            Intent intent = new Intent(Login.this, ProfilActivity.class);
+                            intent.putExtra(TAG_F_name, f_name);
+                            intent.putExtra(TAG_USERNAME, username);
+                            intent.putExtra(TAG_DOU,dou);
+                            finish();
+                            startActivity(intent);
+
+                        }else if(dou.equals("Admin")) {
+                            Intent intent = new Intent(Login.this, ProfilActivityAdmin.class);
+                            intent.putExtra(TAG_F_name, f_name);
+                            intent.putExtra(TAG_USERNAME, username);
+                            intent.putExtra(TAG_DOU,dou);
+                            finish();
+                            startActivity(intent);
+                        }else if (dou.equals("Reseller")){
+                            Intent intent = new Intent(Login.this, ProfilActivityReseller.class);
+                            intent.putExtra(TAG_F_name, f_name);
+                            intent.putExtra(TAG_USERNAME, username);
+                            intent.putExtra(TAG_DOU,dou);
+                            finish();
+                            startActivity(intent);
+                        }
+
                     } else {
                         Toast.makeText(getApplicationContext(),
                                 jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
@@ -214,4 +243,4 @@ public class Login extends AppCompatActivity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
-}
+   }
